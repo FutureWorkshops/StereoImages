@@ -1,0 +1,5 @@
+.DS_Store
+**/*.xcuserdatad/
+Packages/**/.swiftpm/
+Packages/**/Package.realitycomposerpro/WorkspaceData/
+Packages/**/Package.realitycomposerpro/PluginData/

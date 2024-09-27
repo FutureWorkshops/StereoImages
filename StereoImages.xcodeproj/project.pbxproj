@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		78A4BB602CA700DA00FD1C1F /* SpatialImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4BB5F2CA700D700FD1C1F /* SpatialImage.swift */; };
+		78A4BB622CA7033F00FD1C1F /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A4BB612CA7033F00FD1C1F /* ImageIO.framework */; };
+		78A4BB642CA70A5300FD1C1F /* LoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4BB632CA70A4D00FD1C1F /* LoadView.swift */; };
+		78A4BB6C2CA7202E00FD1C1F /* SplitImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4BB6B2CA7202A00FD1C1F /* SplitImageView.swift */; };
 		B40F88E02C6728B100F28DD0 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = B40F88DF2C6728B100F28DD0 /* RealityKitContent */; };
 		B40F88E22C6728B100F28DD0 /* StereoImagesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40F88E12C6728B100F28DD0 /* StereoImagesApp.swift */; };
 		B40F88E42C6728B100F28DD0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40F88E32C6728B100F28DD0 /* ContentView.swift */; };
@@ -17,6 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		78A4BB5F2CA700D700FD1C1F /* SpatialImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialImage.swift; sourceTree = "<group>"; };
+		78A4BB612CA7033F00FD1C1F /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		78A4BB632CA70A4D00FD1C1F /* LoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadView.swift; sourceTree = "<group>"; };
+		78A4BB6B2CA7202A00FD1C1F /* SplitImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitImageView.swift; sourceTree = "<group>"; };
 		B40F88DA2C6728B100F28DD0 /* StereoImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StereoImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B40F88DE2C6728B100F28DD0 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		B40F88E12C6728B100F28DD0 /* StereoImagesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoImagesApp.swift; sourceTree = "<group>"; };
@@ -34,6 +42,7 @@
 			files = (
 				B40F88E02C6728B100F28DD0 /* RealityKitContent in Frameworks */,
 				B40F88F42C6728E400F28DD0 /* DoubleEye in Frameworks */,
+				78A4BB622CA7033F00FD1C1F /* ImageIO.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +70,9 @@
 		B40F88DC2C6728B100F28DD0 /* StereoImages */ = {
 			isa = PBXGroup;
 			children = (
+				78A4BB6B2CA7202A00FD1C1F /* SplitImageView.swift */,
+				78A4BB632CA70A4D00FD1C1F /* LoadView.swift */,
+				78A4BB5F2CA700D700FD1C1F /* SpatialImage.swift */,
 				B40F88E12C6728B100F28DD0 /* StereoImagesApp.swift */,
 				B40F88E32C6728B100F28DD0 /* ContentView.swift */,
 				B40F88E52C6728B200F28DD0 /* Assets.xcassets */,
@@ -90,6 +102,7 @@
 		B40F88F22C6728E400F28DD0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				78A4BB612CA7033F00FD1C1F /* ImageIO.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -169,8 +182,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78A4BB642CA70A5300FD1C1F /* LoadView.swift in Sources */,
+				78A4BB602CA700DA00FD1C1F /* SpatialImage.swift in Sources */,
 				B40F88E42C6728B100F28DD0 /* ContentView.swift in Sources */,
 				B40F88E22C6728B100F28DD0 /* StereoImagesApp.swift in Sources */,
+				78A4BB6C2CA7202E00FD1C1F /* SplitImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

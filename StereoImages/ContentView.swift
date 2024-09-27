@@ -7,7 +7,6 @@
 
 import SwiftUI
 import RealityKit
-import RealityKitContent
 import DoubleEye
 import PhotosUI
 
@@ -17,28 +16,40 @@ struct ContentView: View {
     @State
     var rightEyeImage:PhotosPickerItem? = nil
     @State
+    var bothEyeImage:PhotosPickerItem? = nil
+    @State
     var imagePack:StereoImagePack? = nil
     @State
     var loading = false
+    @Environment(\.openWindow)
+    var openWindow
+    
     var body: some View {
         NavigationStack {
             VStack {
                 HStack {
                     VStack {
-                        if let leftEyeImage {
+                        if let _ = leftEyeImage {
                             Label("Left Eye Image Picked", systemImage: "checkmark")
                         }
-                        PhotosPicker("Pick Left Eye Image", selection: $leftEyeImage)
+                        PhotosPicker("Pick Left Eye Image", selection: $leftEyeImage, matching: .images)
                     }
                     .padding()
                     VStack {
-                        if let rightEyeImage {
+                        if let _ = rightEyeImage {
                             Label("Right Eye Image Picked", systemImage: "checkmark")
                         }
-                        PhotosPicker("Pick Right Eye Image", selection: $rightEyeImage)
+                        PhotosPicker("Pick Right Eye Image", selection: $rightEyeImage, matching: .images)
                     }
                     .padding()
+                    
+                    if leftEyeImage == nil && rightEyeImage == nil {
+                        VStack {
+                            PhotosPicker("Pick Both Images", selection: $bothEyeImage, matching: .images)
+                        }
+                    }
                 }
+                
                 if let leftEyeImage,let rightEyeImage {
                     Button("Next", action: {
                         loading = true
@@ -46,7 +57,7 @@ struct ContentView: View {
                             do {
                                 let leftUIImage = try await leftEyeImage.loadTransferable(type: Data.self)!
                                 let rightUIImage = try await rightEyeImage.loadTransferable(type: Data.self)!
-                                self.imagePack = .init(left: .init(data: leftUIImage)!, right: .init(data: rightUIImage)!)
+                                self.imagePack = .init(left: parse(leftUIImage)!, right: parse(rightUIImage)!)
                             } catch {
                                 fatalError(error.localizedDescription)
                             }
@@ -60,7 +71,7 @@ struct ContentView: View {
                             ProgressView()
                         }
                     }
-                } else {
+                }  else {
                     Text("Please pick images before continue.")
                 }
                 
@@ -68,14 +79,34 @@ struct ContentView: View {
             .navigationDestination(item: $imagePack) {
                 StoereoPhotoView(imagePack: $0)
             }
+            .onChange(of: bothEyeImage) { _, newValue in
+                if let newValue {
+                    Task { await loadSeparatedEyes(item: newValue) }
+                }
+            }
         }
+    }
+    
+    func parse(_ data: Data) -> CGImage? {
+        return UIImage(data: data)?.cgImage
+    }
+    
+    func loadSeparatedEyes(item: PhotosPickerItem) async {
+        guard let images = try? await item.loadSpatialImage() else {
+            return
+        }
+        self.imagePack = .init(
+            left: images.leftImage.bitmap,
+            right: images.leftImage.bitmap
+        )
+        bothEyeImage = nil
     }
 }
 
 struct StereoImagePack:Identifiable,Hashable {
     var id = UUID()
-    var left:UIImage
-    var right:UIImage
+    var left: CGImage
+    var right: CGImage
 }
 
 struct StoereoPhotoView: View {
@@ -100,7 +131,11 @@ struct StoereoPhotoView: View {
                     
                     
                     //if a image is 1920x1080 the plane size is 0.192x0.108
-                    let entity = ModelEntity(mesh: .generatePlane(width: Float(imgLeft.size.width)/10000, height: Float(imgLeft.size.height)/10000, cornerRadius: 0.01))
+                    let entity = ModelEntity(mesh: .generatePlane(
+                        width: Float(imgLeft.width)/10000,
+                        height: Float(imgLeft.height)/10000,
+                        cornerRadius: 0.01
+                    ))
                     
                     
                     
@@ -120,14 +155,13 @@ struct StoereoPhotoView: View {
 
 @Observable
 class ViewModel {
-    func generateMaterial(_ image:UIImage) async throws -> TextureResource {
-        if let cgImg = image.cgImage {
-            let texture = try await TextureResource(image: cgImg, options: TextureResource.CreateOptions.init(semantic: nil))
-            
-            return texture
-        } else {
-            throw ViewError.error1
-        }
+    func generateMaterial(_ cgImg: CGImage) async throws -> TextureResource {
+        let texture = try await TextureResource(
+            image: cgImg,
+            options: .init(semantic: .hdrColor)
+        )
+        
+        return texture
     }
     enum ViewError:Error,LocalizedError {
         case error1
